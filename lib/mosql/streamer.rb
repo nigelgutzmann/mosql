@@ -117,6 +117,9 @@ module MoSQL
         db = @mongo.db(dbname)
         collections = db.collections.select { |c| spec.key?(c.name) }
 
+        # sort the collections by the initial_insert_order to establish foreign key relationships correctly
+        collections = collections.sort_by { |collection| spec[collection.name][:meta][:initial_insert_order] }
+
         collections.each do |collection|
           ns = "#{dbname}.#{collection.name}"
           import_collection(ns, collection, spec[collection.name][:meta][:filter])

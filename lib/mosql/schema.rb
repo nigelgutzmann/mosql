@@ -77,6 +77,8 @@ module MoSQL
 
     def create_schema(db, clobber=false)
       @map.values.each do |dbspec|
+        dbspec = dbspec.sort_by { |n, collection| collection[:meta] && collection[:meta][:initial_insert_order] ? collection[:meta][:initial_insert_order] : -99999999 }
+
         dbspec.each do |n, collection|
           next unless n.is_a?(String)
           meta = collection[:meta]
