@@ -41,6 +41,8 @@ module MoSQL
         wrapped = e.wrapped_exception
         if wrapped.result && options[:unsafe]
           log.warn("Ignoring row (#{obj.inspect}): #{e}")
+        elsif e.class.name == 'Sequel::ForeignKeyConstraintViolation'
+          log.warn("Ignoring row that breaks foreign key constraint: #{e}")
         else
           log.error("Error processing #{obj.inspect} for #{ns}.")
           raise e
