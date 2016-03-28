@@ -70,7 +70,7 @@ module MoSQL
       tries.times do |try|
         begin
           yield
-        rescue Mongo::ConnectionError, Mongo::ConnectionFailure, Mongo::OperationFailure => e
+        rescue Mongo::ConnectionError, Mongo::ConnectionFailure, Mongo::OperationFailure, Mongo::OperationTimeout => e
           # Duplicate key error
           raise if e.kind_of?(Mongo::OperationFailure) && [11000, 11001].include?(e.error_code)
           # Cursor timeout
